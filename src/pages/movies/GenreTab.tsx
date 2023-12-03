@@ -1,9 +1,9 @@
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {GenreType, Nullable} from '../../types';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {genresSelectionUpdate} from '../../redux/actions/genresActions';
 import {moviesListReset} from '../../redux/actions/moviesActions';
+import {GenreType, Nullable} from '../../types';
 
 type Props = {
   item: GenreType;

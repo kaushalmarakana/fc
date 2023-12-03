@@ -8,6 +8,13 @@ type SectionProps = {
 };
 
 const Section: React.FC<SectionProps> = ({item: section}) => {
+  const renderBackfill = () => {
+    return (
+      <View style={styles.emptyView}>
+        <Text>No Movies Available</Text>
+      </View>
+    );
+  };
   return (
     <View key={section.title}>
       <Text style={styles.title}>{section.title}</Text>
@@ -15,6 +22,7 @@ const Section: React.FC<SectionProps> = ({item: section}) => {
         data={section.data}
         keyExtractor={i => i.title}
         numColumns={2}
+        ListEmptyComponent={renderBackfill}
         renderItem={({item}) => <MovieCard item={item} />}
       />
     </View>
@@ -25,6 +33,13 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 20,
+  },
+  emptyView: {
+    height: 200,
+    width: 200,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

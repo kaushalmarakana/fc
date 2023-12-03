@@ -1,4 +1,4 @@
-import {MoviesListType} from '../../types';
+import {DirectionType, MoviesListType, Nullable} from '../../types';
 import {
   MOVIES_LIST_FETCH_ERROR,
   MOVIES_LIST_FETCH_INIT,
@@ -6,21 +6,21 @@ import {
   MOVIES_LIST_RESET,
 } from './types';
 
-export const moviesListInit = (isPrev: boolean) => {
+export const moviesListInit = (direction: Nullable<DirectionType>) => {
   return {
     type: MOVIES_LIST_FETCH_INIT,
-    payload: {isPrev},
+    payload: {direction},
   };
 };
 
 export const moviesListSuccess = (
   movies: MoviesListType,
   year: number,
-  isPrev: boolean,
+  direction: Nullable<DirectionType>,
 ) => {
   return {
     type: MOVIES_LIST_FETCH_SUCCESS,
-    payload: {movies, year, isPrev},
+    payload: {movies, year, direction},
   };
 };
 

@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   show: {
-    opacity: 1,
+    display: 'flex',
   },
   hide: {
-    opacity: 0,
+    display: 'none',
   },
 });
 

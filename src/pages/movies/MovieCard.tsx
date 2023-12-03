@@ -31,7 +31,7 @@ const MovieView: React.FC<MovieViewProps> = ({item}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.5,
     height: 320,
     marginHorizontal: 5,
     marginVertical: 5,

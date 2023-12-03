@@ -6,7 +6,6 @@ import {
   MOVIES_LIST_FETCH_SUCCESS,
   MOVIES_LIST_RESET,
 } from '../actions/types';
-import {Directions} from '../../utils/constants';
 
 export type MoviesStateType = {
   moviesSections: MoviesSectionType;
@@ -29,16 +28,16 @@ const moviesReducer = (state = initialState, action: AnyAction) => {
         ...state,
         isLoading: true,
         error: null,
-        direction: action.payload.isPrev ? Directions.up : Directions.down,
+        direction: action.payload.direction,
       };
     case MOVIES_LIST_FETCH_SUCCESS:
-      const {year, movies, isPrev} = action.payload;
+      const {year, movies, direction} = action.payload;
       const entry = {
         title: year,
         data: movies,
       };
       let results = [];
-      if (isPrev) {
+      if (direction === 'up') {
         results = [entry, ...state.moviesSections];
       } else {
         results = [...state.moviesSections, entry];

@@ -1,45 +1,55 @@
 import _ from 'lodash';
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchGenres, fetchMovies} from '../../apis/movies';
-import CircularLoader from '../../components/CircularLoader';
+import {fetchMovies} from '../../apis/movies';
 import {selectGenres, selectMovies} from '../../redux/selectors';
 import {SectionType} from '../../types';
+import ErrorBackfill from './ErrorBackfill';
+import GenresTabNav from './GenresTabNav';
 import ListLoaderView from './ListLoaderView';
 import Section from './Section';
-import GenresTabNav from './GenresTabNav';
 
 const YEAR = 2012;
 
 const MoviesPage: React.FC<{}> = () => {
-  const {moviesSections, isLoading, direction} = useSelector(selectMovies);
-  const {selectedGenres, isLoading: genresLoading} = useSelector(selectGenres);
+  const {moviesSections, isLoading, direction, error} =
+    useSelector(selectMovies);
+  const {selectedGenres} = useSelector(selectGenres);
 
   const dispatch = useDispatch();
   const lastFetchedYear = useRef(YEAR);
   const firstFetchedYear = useRef(YEAR);
   const flatListRef = useRef<any>();
+  const initialPaintFailed = !moviesSections.length && !!error;
 
-  useEffect(() => {
+  const initiateFetch = useCallback(() => {
     firstFetchedYear.current = YEAR;
     lastFetchedYear.current = YEAR;
-    fetchMovies(dispatch, YEAR, false, selectedGenres);
+    fetchMovies(dispatch, YEAR, null, selectedGenres);
   }, [dispatch, selectedGenres]);
 
+  useEffect(() => {
+    initiateFetch();
+  }, [initiateFetch]);
+
+  const tryAgain = () => {
+    initiateFetch();
+  };
+
   const fetchNextYearsMovies = () => {
-    if (isLoading) {
+    if (isLoading || initialPaintFailed) {
       return;
     }
-    fetchMovies(dispatch, lastFetchedYear.current + 1, false, selectedGenres);
+    fetchMovies(dispatch, lastFetchedYear.current + 1, 'down', selectedGenres);
     lastFetchedYear.current = lastFetchedYear.current + 1;
   };
 
   const fetchPrevYearsMovies = () => {
-    if (isLoading) {
+    if (isLoading || initialPaintFailed) {
       return;
     }
-    fetchMovies(dispatch, firstFetchedYear.current - 1, true, selectedGenres);
+    fetchMovies(dispatch, firstFetchedYear.current - 1, 'up', selectedGenres);
     firstFetchedYear.current = firstFetchedYear.current - 1;
   };
 
@@ -55,51 +65,53 @@ const MoviesPage: React.FC<{}> = () => {
     <Section item={item} />
   );
 
+  const renderBackfill = () => (
+    <ErrorBackfill
+      initialPaintFailed={initialPaintFailed}
+      error={error}
+      onRetry={tryAgain}
+    />
+  );
+
   return (
-    <View>
-      <GenresTabNav />
-      <FlatList
-        ref={ref => (flatListRef.current = ref)}
-        style={styles.listStyle}
-        data={moviesSections}
-        keyExtractor={item => item.title.toString()}
-        renderItem={renderSection}
-        showsVerticalScrollIndicator={false}
-        onEndReached={_.debounce(fetchNextYearsMovies, 300)}
-        onEndReachedThreshold={0.7}
-        onStartReached={_.debounce(fetchPrevYearsMovies, 300)}
-        onStartReachedThreshold={0.5}
-        // removeClippedSubviews
-        // ListHeaderComponent={renderListHeader}
-        // ListFooterComponent={renderListFooter}
-        maintainVisibleContentPosition={{
-          minIndexForVisible: 0,
-        }}
-      />
-      {/* {isLoading && (
-        <View style={styles.overlay}>
-          <CircularLoader />
-        </View>
-      )} */}
+    <View style={styles.container}>
+      <View style={styles.tabWrapper}>
+        <GenresTabNav />
+      </View>
+      <View style={styles.listWrapper}>
+        {renderListHeader()}
+        <FlatList
+          ref={ref => (flatListRef.current = ref)}
+          style={styles.listStyle}
+          contentContainerStyle={styles.listContentStyle}
+          data={moviesSections}
+          keyExtractor={item => item.title.toString()}
+          renderItem={renderSection}
+          showsVerticalScrollIndicator={false}
+          onEndReached={_.debounce(fetchNextYearsMovies, 500)}
+          onEndReachedThreshold={1}
+          onStartReached={_.debounce(fetchPrevYearsMovies, 500)}
+          onStartReachedThreshold={1}
+          ListEmptyComponent={renderBackfill}
+          maintainVisibleContentPosition={{
+            minIndexForVisible: 0,
+          }}
+        />
+        {renderListFooter()}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  listStyle: {
+  container: {flexGrow: 1},
+  listContentStyle: {
     marginHorizontal: 10,
     paddingBottom: 50,
   },
-  overlay: {
-    position: 'absolute',
-    width: '100%',
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'black',
-    opacity: 0.6,
-  },
+  tabWrapper: {height: 60},
+  listWrapper: {flex: 1},
+  listStyle: {flex: 1},
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
