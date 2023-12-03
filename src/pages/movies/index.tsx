@@ -9,6 +9,7 @@ import ErrorBackfill from './ErrorBackfill';
 import GenresTabNav from './GenresTabNav';
 import ListLoaderView from './ListLoaderView';
 import Section from './Section';
+import {moviesListReset} from '../../redux/actions/moviesActions';
 
 const YEAR = 2012;
 
@@ -36,6 +37,12 @@ const MoviesPage: React.FC<{}> = () => {
   const tryAgain = () => {
     initiateFetch();
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(moviesListReset());
+    };
+  }, [dispatch]);
 
   const fetchNextYearsMovies = () => {
     if (isLoading || initialPaintFailed) {

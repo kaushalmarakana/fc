@@ -13,6 +13,11 @@ import {
 } from '../redux/actions/genresActions';
 import {GenresStateType} from '../redux/reducers/genresReducer';
 import {DirectionType, Nullable} from '../types';
+import {
+  moviesSearchFetchError,
+  moviesSearchFetchInit,
+  moviesSearchFetchSuccess,
+} from '../redux/actions/searchActions';
 
 const API_KEY = '2dca580c2a14b55200e784d157207b4d';
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -57,17 +62,18 @@ export const fetchGenres = async (dispatch: Dispatch) => {
 
 export const fetchSearchedMovies = async (
   dispatch: Dispatch,
-  query: string,
+  query: Nullable<string>,
+  page: number,
 ) => {
-  const endPoint = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}`;
+  const endPoint = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`;
 
   try {
-    dispatch(genresListFetchInit());
+    dispatch(moviesSearchFetchInit(page > 1));
     const response = await axios.get(endPoint);
-    const genres = response?.data?.genres;
-    dispatch(genresListFetchSuccess(genres));
+    const results = response?.data?.results;
+    dispatch(moviesSearchFetchSuccess(results, page > 1));
   } catch (err) {
     const msg = getApiErrorMessage(err);
-    dispatch(genresListFetchError(msg));
+    dispatch(moviesSearchFetchError(msg));
   }
 };
