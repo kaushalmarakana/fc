@@ -21,7 +21,7 @@ const GenreTab: React.FC<Props> = ({item, isSelected}) => {
   return (
     <TouchableOpacity
       onPress={onPressGenre}
-      style={[styles.container, isSelected && {backgroundColor: 'red'}]}>
+      style={[styles.container, isSelected && styles.activeTab]}>
       <Text style={styles.title}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -36,10 +36,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     marginHorizontal: 10,
   },
+  activeTab: {
+    backgroundColor: 'red',
+  },
   title: {
     color: 'white',
     includeFontPadding: false,
   },
 });
 
-export default GenreTab;
+export default React.memo(GenreTab);

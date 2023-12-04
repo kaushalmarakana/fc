@@ -10,7 +10,7 @@ const App = () => {
   const [searchText, setSearchText] = useState<Nullable<string>>();
 
   const onChangeText = (text: string) => {
-    setSearchText(text);
+    setSearchText(text.trim());
   };
 
   return (

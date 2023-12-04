@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import React, {useCallback, useEffect, useRef} from 'react';
-import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  View,
+  ViewToken,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchMovies} from '../../apis/movies';
 import {selectGenres, selectMovies} from '../../redux/selectors';
@@ -17,6 +23,7 @@ const MoviesPage: React.FC<{}> = () => {
   const {moviesSections, isLoading, direction, error} =
     useSelector(selectMovies);
   const {selectedGenres} = useSelector(selectGenres);
+  const viewableYear = useRef<number>(YEAR);
 
   const dispatch = useDispatch();
   const lastFetchedYear = useRef(YEAR);
@@ -25,9 +32,9 @@ const MoviesPage: React.FC<{}> = () => {
   const initialPaintFailed = !moviesSections.length && !!error;
 
   const initiateFetch = useCallback(() => {
-    firstFetchedYear.current = YEAR;
-    lastFetchedYear.current = YEAR;
-    fetchMovies(dispatch, YEAR, null, selectedGenres);
+    firstFetchedYear.current = viewableYear.current;
+    lastFetchedYear.current = viewableYear.current;
+    fetchMovies(dispatch, viewableYear.current, null, selectedGenres);
   }, [dispatch, selectedGenres]);
 
   useEffect(() => {
@@ -80,6 +87,13 @@ const MoviesPage: React.FC<{}> = () => {
     />
   );
 
+  const onViewCallBack = React.useCallback(
+    (info: {viewableItems: Array<ViewToken>; changed: Array<ViewToken>}) => {
+      viewableYear.current = Number(info.viewableItems?.[0]?.key) || YEAR;
+    },
+    [],
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.tabWrapper}>
@@ -99,6 +113,8 @@ const MoviesPage: React.FC<{}> = () => {
           onEndReachedThreshold={1}
           onStartReached={_.debounce(fetchPrevYearsMovies, 500)}
           onStartReachedThreshold={1}
+          onViewableItemsChanged={onViewCallBack}
+          viewabilityConfig={{viewAreaCoveragePercentThreshold: 50}}
           ListEmptyComponent={renderBackfill}
           maintainVisibleContentPosition={{
             minIndexForVisible: 0,
