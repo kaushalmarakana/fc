@@ -18,7 +18,7 @@ export type SectionType = {
   data: MoviesListType;
 };
 
-export type MoviesListType = Nullable<Array<MovieItemType>>;
+export type MoviesListType = Array<MovieItemType>;
 
 export type MoviesSectionType = ReadonlyArray<
   SectionListData<MovieItemType, SectionType>

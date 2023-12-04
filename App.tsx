@@ -1,10 +1,10 @@
+import _ from 'lodash';
 import React, {useState} from 'react';
 import {StyleSheet, TextInput} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MoviesPage from './src/pages/movies';
 import SearchPage from './src/pages/search';
 import {Nullable} from './src/types';
-import _ from 'lodash';
 
 const App = () => {
   const [searchText, setSearchText] = useState<Nullable<string>>();

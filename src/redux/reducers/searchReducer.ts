@@ -4,6 +4,7 @@ import {
   MOVIES_SEARCH_FETCH_ERROR,
   MOVIES_SEARCH_FETCH_INIT,
   MOVIES_SEARCH_FETCH_SUCCESS,
+  MOVIES_SEARCH_LIST_RESET,
 } from '../actions/types';
 
 export type SearchStateType = {
@@ -27,13 +28,12 @@ const searchReducer = (state = initialState, action: AnyAction) => {
         ...state,
         isLoading: true,
         error: null,
-        movies: action.payload.isUpdate ? state.movies : [],
       };
     case MOVIES_SEARCH_FETCH_SUCCESS:
-      const {movies, isUpdate, totalPages} = action.payload;
+      const {movies, totalPages} = action.payload;
       return {
         ...state,
-        movies: isUpdate ? state.movies?.concat(movies) : movies,
+        movies: [...state.movies, ...movies],
         totalPages: totalPages,
         isLoading: false,
         error: null,
@@ -43,6 +43,11 @@ const searchReducer = (state = initialState, action: AnyAction) => {
         ...state,
         error: action.payload,
         isLoading: false,
+      };
+    case MOVIES_SEARCH_LIST_RESET:
+      return {
+        ...state,
+        movies: [],
       };
 
     default:

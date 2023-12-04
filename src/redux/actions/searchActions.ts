@@ -3,6 +3,7 @@ import {
   MOVIES_SEARCH_FETCH_ERROR,
   MOVIES_SEARCH_FETCH_INIT,
   MOVIES_SEARCH_FETCH_SUCCESS,
+  MOVIES_SEARCH_LIST_RESET,
 } from './types';
 
 export const moviesSearchFetchInit = (isUpdate: boolean) => {
@@ -14,12 +15,11 @@ export const moviesSearchFetchInit = (isUpdate: boolean) => {
 
 export const moviesSearchFetchSuccess = (
   movies: MoviesListType,
-  isUpdate: boolean,
   totalPages: number,
 ) => {
   return {
     type: MOVIES_SEARCH_FETCH_SUCCESS,
-    payload: {movies, isUpdate, totalPages},
+    payload: {movies, totalPages},
   };
 };
 
@@ -27,5 +27,11 @@ export const moviesSearchFetchError = (msg: string) => {
   return {
     type: MOVIES_SEARCH_FETCH_ERROR,
     payload: msg,
+  };
+};
+
+export const moviesSearchListReset = () => {
+  return {
+    type: MOVIES_SEARCH_LIST_RESET,
   };
 };
