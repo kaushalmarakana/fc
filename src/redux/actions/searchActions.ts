@@ -15,10 +15,11 @@ export const moviesSearchFetchInit = (isUpdate: boolean) => {
 export const moviesSearchFetchSuccess = (
   movies: MoviesListType,
   isUpdate: boolean,
+  totalPages: number,
 ) => {
   return {
     type: MOVIES_SEARCH_FETCH_SUCCESS,
-    payload: {movies, isUpdate},
+    payload: {movies, isUpdate, totalPages},
   };
 };
 

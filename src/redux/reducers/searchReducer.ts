@@ -10,11 +10,13 @@ export type SearchStateType = {
   movies: MoviesListType;
   isLoading: Nullable<boolean>;
   error: Nullable<string>;
+  totalPages: number;
 };
 
 const initialState: SearchStateType = {
   movies: [],
   isLoading: false,
+  totalPages: 1,
   error: null,
 };
 
@@ -28,10 +30,11 @@ const searchReducer = (state = initialState, action: AnyAction) => {
         movies: action.payload.isUpdate ? state.movies : [],
       };
     case MOVIES_SEARCH_FETCH_SUCCESS:
-      const {movies, isUpdate} = action.payload;
+      const {movies, isUpdate, totalPages} = action.payload;
       return {
         ...state,
         movies: isUpdate ? state.movies?.concat(movies) : movies,
+        totalPages: totalPages,
         isLoading: false,
         error: null,
       };

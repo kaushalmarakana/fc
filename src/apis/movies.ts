@@ -73,7 +73,8 @@ export const fetchSearchedMovies = async (
     dispatch(moviesSearchFetchInit(page > 1));
     const response = await axios.get(endPoint);
     const results = response?.data?.results;
-    dispatch(moviesSearchFetchSuccess(results, page > 1));
+    const totalPages = response?.data?.total_pages;
+    dispatch(moviesSearchFetchSuccess(results, page > 1, totalPages));
   } catch (err) {
     const msg = getApiErrorMessage(err);
     dispatch(moviesSearchFetchError(msg));

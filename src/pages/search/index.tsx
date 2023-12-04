@@ -14,7 +14,8 @@ type Props = {
 const SearchPage: React.FC<Props> = ({searchText}) => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const {isLoading, movies, error} = useSelector(selectSearchedMovies);
+  const {isLoading, movies, error, totalPages} =
+    useSelector(selectSearchedMovies);
 
   useEffect(() => {
     fetchSearchedMovies(dispatch, searchText, page);
@@ -25,7 +26,7 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
   }, []);
 
   const loadMore = () => {
-    if (isLoading) {
+    if (isLoading || page > totalPages) {
       return;
     }
     setPage(page + 1);
@@ -72,7 +73,9 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   emptyView: {
     height: 200,
     width: 200,
