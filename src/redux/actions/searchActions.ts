@@ -6,10 +6,9 @@ import {
   MOVIES_SEARCH_LIST_RESET,
 } from './types';
 
-export const moviesSearchFetchInit = (isUpdate: boolean) => {
+export const moviesSearchFetchInit = () => {
   return {
     type: MOVIES_SEARCH_FETCH_INIT,
-    payload: {isUpdate},
   };
 };
 

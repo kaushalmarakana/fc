@@ -52,9 +52,9 @@ const moviesReducer = (state = initialState, action: AnyAction) => {
     case MOVIES_LIST_FETCH_ERROR:
       return {
         ...state,
-        error: action.payload,
+        error: action.payload.msg,
         isLoading: false,
-        direction: null,
+        direction: action.payload.direction,
       };
     case MOVIES_LIST_RESET:
       return {

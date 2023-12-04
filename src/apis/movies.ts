@@ -27,6 +27,8 @@ export const fetchMovies = async (
   year: number,
   direction: Nullable<DirectionType>,
   selectedGenres: GenresStateType['selectedGenres'],
+  successCB?: () => void,
+  failureCB?: () => void,
 ) => {
   let genresIds = '';
 
@@ -34,7 +36,6 @@ export const fetchMovies = async (
     genresIds = Object.keys(selectedGenres).join(',');
   }
   const endPoint = `${BASE_URL}/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&primary_release_year=${year}&page=1&vote_count.gte=100&with_genres=${genresIds}`;
-
   try {
     dispatch(moviesListInit(direction));
     const response = await axios.get(endPoint);
@@ -42,9 +43,11 @@ export const fetchMovies = async (
       (a: MovieItemType, b: MovieItemType) => b.popularity - a.popularity,
     );
     dispatch(moviesListSuccess(movies, year, direction));
+    successCB?.();
   } catch (err) {
     const msg = getApiErrorMessage(err);
-    dispatch(moviesListError(msg));
+    dispatch(moviesListError(msg, direction));
+    failureCB?.();
   }
 };
 
@@ -68,9 +71,8 @@ export const fetchSearchedMovies = async (
   page: number,
 ) => {
   const endPoint = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`;
-
   try {
-    dispatch(moviesSearchFetchInit(page > 1));
+    dispatch(moviesSearchFetchInit());
     const response = await axios.get(endPoint);
     const results = response?.data?.results;
     const totalPages = response?.data?.total_pages;

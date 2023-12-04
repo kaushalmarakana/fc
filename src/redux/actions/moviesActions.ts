@@ -24,10 +24,10 @@ export const moviesListSuccess = (
   };
 };
 
-export const moviesListError = (msg: string) => {
+export const moviesListError = (msg: string, direction: Nullable<string>) => {
   return {
     type: MOVIES_LIST_FETCH_ERROR,
-    payload: msg,
+    payload: {msg, direction},
   };
 };
 

@@ -1,15 +1,16 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import CircularLoader from '../../components/CircularLoader';
+import COLORS from '../../theme/colors';
 import {Nullable} from '../../types';
 
 type Props = {
-  show: Nullable<boolean>;
+  showLoader: Nullable<boolean>;
 };
 
-const ListLoaderView: React.FC<Props> = ({show}) => {
+const ListLoaderView: React.FC<Props> = ({showLoader}) => {
   return (
-    <View style={[styles.container, show ? styles.show : styles.hide]}>
+    <View style={[styles.container, showLoader ? styles.show : styles.hide]}>
       <CircularLoader />
     </View>
   );
@@ -17,7 +18,6 @@ const ListLoaderView: React.FC<Props> = ({show}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
     width: '100%',
   },
   show: {
@@ -25,6 +25,19 @@ const styles = StyleSheet.create({
   },
   hide: {
     display: 'none',
+  },
+  errorView: {
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  tryAgain: {
+    height: 40,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    borderColor: COLORS.tryAgainBorderColor,
+    borderWidth: 1,
   },
 });
 

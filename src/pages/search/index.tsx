@@ -1,12 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  FlatList,
-  ListRenderItem,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, ListRenderItem, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchSearchedMovies} from '../../apis/movies';
 import CircularLoader from '../../components/CircularLoader';
@@ -15,6 +8,7 @@ import {selectSearchedMovies} from '../../redux/selectors';
 import COLORS from '../../theme/colors';
 import {MovieItemType, Nullable} from '../../types';
 import MovieCard from '../movies/MovieCard';
+import RetryToast from '../../components/RetryToast';
 
 type Props = {
   searchText: Nullable<string>;
@@ -54,35 +48,18 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
         </View>
       );
     }
-    if (error && !isLoading && !movies.length) {
-      return renderTryAgain();
-    }
   };
 
-  const renderHeader = () => {
+  const renderTopLoader = () => {
     if (isLoading && page === 1) {
       return <CircularLoader />;
     }
     return null;
   };
 
-  const renderTryAgain = () => {
-    return (
-      <View style={styles.errorView}>
-        <Text>Error : {error}</Text>
-        <TouchableOpacity style={styles.tryAgain} onPress={tryAgain}>
-          <Text>Try Again</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const renderFooter = () => {
+  const renderBottomLoader = () => {
     if (isLoading && page > 1) {
       return <CircularLoader />;
-    }
-    if (error && page > 1) {
-      return renderTryAgain();
     }
     return null;
   };
@@ -94,7 +71,7 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
 
   return (
     <View style={styles.container}>
-      {renderHeader()}
+      {renderTopLoader()}
       {renderBackfill()}
       <FlatList
         data={movies}
@@ -105,7 +82,8 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
         onEndReachedThreshold={1}
         renderItem={renderItem}
       />
-      {renderFooter()}
+      {error && <RetryToast message={error} onAction={tryAgain} />}
+      {renderBottomLoader()}
     </View>
   );
 };

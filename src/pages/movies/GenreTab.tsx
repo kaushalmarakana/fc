@@ -23,7 +23,9 @@ const GenreTab: React.FC<Props> = ({item, isSelected}) => {
     <TouchableOpacity
       onPress={onPressGenre}
       style={[styles.container, isSelected && styles.activeTab]}>
-      <Text style={styles.title}>{item.name}</Text>
+      <Text style={[styles.title, isSelected && styles.activeTitle]}>
+        {item.name}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -34,15 +36,22 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.tabBgColor,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: COLORS.tabBgColor,
   },
   activeTab: {
     backgroundColor: COLORS.activeTabColor,
+    borderColor: COLORS.activeTabColor,
   },
   title: {
-    color: COLORS.tabTitleColor,
+    color: COLORS.tabBgColor,
     includeFontPadding: false,
+    fontWeight: 'bold',
+  },
+  activeTitle: {
+    color: COLORS.tabTitleColorActive,
   },
 });
 

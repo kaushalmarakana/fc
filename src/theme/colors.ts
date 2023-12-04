@@ -1,7 +1,8 @@
 const COLORS = {
   loaderColor: 'black',
   activeTabColor: 'red',
-  tabTitleColor: 'white',
+  tabTitleColor: 'black',
+  tabTitleColorActive: 'white',
   tryAgainBorderColor: 'red',
   tabBgColor: '#333',
 };

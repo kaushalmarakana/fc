@@ -1,6 +1,6 @@
-import React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {SectionType} from '../../types';
+import React, {useCallback} from 'react';
+import {FlatList, ListRenderItem, StyleSheet, Text, View} from 'react-native';
+import {MovieItemType, SectionType} from '../../types';
 import MovieCard from './MovieCard';
 
 type SectionProps = {
@@ -8,13 +8,19 @@ type SectionProps = {
 };
 
 const Section: React.FC<SectionProps> = ({item: section}) => {
-  const renderBackfill = () => {
+  const renderBackfill = useCallback(() => {
     return (
       <View style={styles.emptyView}>
         <Text>No Movies Available</Text>
       </View>
     );
-  };
+  }, []);
+
+  const renderItem: ListRenderItem<MovieItemType> = useCallback(
+    ({item}) => <MovieCard item={item} />,
+    [],
+  );
+
   return (
     <View key={section.title}>
       <Text style={styles.title}>{section.title}</Text>
@@ -23,7 +29,7 @@ const Section: React.FC<SectionProps> = ({item: section}) => {
         keyExtractor={i => i.title}
         numColumns={2}
         ListEmptyComponent={renderBackfill}
-        renderItem={({item}) => <MovieCard item={item} />}
+        renderItem={renderItem}
       />
     </View>
   );
