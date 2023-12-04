@@ -20,15 +20,15 @@ import {moviesListReset} from '../../redux/actions/moviesActions';
 const YEAR = 2012;
 
 const MoviesPage: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+
   const {moviesSections, isLoading, direction, error} =
     useSelector(selectMovies);
   const {selectedGenres} = useSelector(selectGenres);
   const viewableYear = useRef<number>(YEAR);
-
-  const dispatch = useDispatch();
   const lastFetchedYear = useRef(YEAR);
   const firstFetchedYear = useRef(YEAR);
-  const flatListRef = useRef<any>();
+
   const initialPaintFailed = !moviesSections.length && !!error;
 
   const initiateFetch = useCallback(() => {
@@ -41,9 +41,9 @@ const MoviesPage: React.FC<{}> = () => {
     initiateFetch();
   }, [initiateFetch]);
 
-  const tryAgain = () => {
+  const tryAgain = useCallback(() => {
     initiateFetch();
-  };
+  }, [initiateFetch]);
 
   useEffect(() => {
     return () => {
@@ -75,19 +75,23 @@ const MoviesPage: React.FC<{}> = () => {
     return <ListLoaderView show={isLoading && direction === 'down'} />;
   };
 
-  const renderSection: ListRenderItem<SectionType> = ({item}) => (
-    <Section item={item} />
+  const renderSection: ListRenderItem<SectionType> = useCallback(
+    ({item}) => <Section item={item} />,
+    [],
   );
 
-  const renderBackfill = () => (
-    <ErrorBackfill
-      initialPaintFailed={initialPaintFailed}
-      error={error}
-      onRetry={tryAgain}
-    />
+  const renderBackfill = useCallback(
+    () => (
+      <ErrorBackfill
+        initialPaintFailed={initialPaintFailed}
+        error={error}
+        onRetry={tryAgain}
+      />
+    ),
+    [error, initialPaintFailed, tryAgain],
   );
 
-  const onViewCallBack = React.useCallback(
+  const onViewCallBack = useCallback(
     (info: {viewableItems: Array<ViewToken>; changed: Array<ViewToken>}) => {
       viewableYear.current = Number(info.viewableItems?.[0]?.key) || YEAR;
     },
@@ -102,7 +106,6 @@ const MoviesPage: React.FC<{}> = () => {
       <View style={styles.listWrapper}>
         {renderListHeader()}
         <FlatList
-          ref={ref => (flatListRef.current = ref)}
           style={styles.listStyle}
           contentContainerStyle={styles.listContentStyle}
           data={moviesSections}

@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GenresTabNav;
+export default React.memo(GenresTabNav);

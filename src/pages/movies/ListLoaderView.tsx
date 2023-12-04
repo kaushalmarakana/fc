@@ -1,5 +1,5 @@
-import {StyleSheet, View} from 'react-native';
 import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import CircularLoader from '../../components/CircularLoader';
 import {Nullable} from '../../types';
 

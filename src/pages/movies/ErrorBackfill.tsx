@@ -1,6 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Nullable} from '../../types';
 import React from 'react';
+import COLORS from '../../theme/colors';
 
 type ErrorBackfillProps = {
   initialPaintFailed: Nullable<boolean>;
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   tryAgainBtn: {
     height: 40,
     width: 100,
-    borderColor: 'red',
+    borderColor: COLORS.tryAgainBorderColor,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',

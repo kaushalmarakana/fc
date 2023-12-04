@@ -29,8 +29,8 @@ const MovieView: React.FC<MovieViewProps> = ({item}) => {
         <Text style={styles.title} numberOfLines={2}>
           {item.title}
         </Text>
-        <Text style={styles.ratings} numberOfLines={2}>
-          Ratings : {item.vote_average}
+        <Text style={styles.popularity} numberOfLines={2}>
+          Popularity : {item.popularity}
         </Text>
       </View>
     </View>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     height: 80,
     justifyContent: 'center',
   },
-  ratings: {
+  popularity: {
     marginTop: 5,
   },
 });

@@ -12,15 +12,15 @@ import {
   genresListFetchSuccess,
 } from '../redux/actions/genresActions';
 import {GenresStateType} from '../redux/reducers/genresReducer';
-import {DirectionType, Nullable} from '../types';
+import {DirectionType, MovieItemType, Nullable} from '../types';
 import {
   moviesSearchFetchError,
   moviesSearchFetchInit,
   moviesSearchFetchSuccess,
 } from '../redux/actions/searchActions';
 
-const API_KEY = '2dca580c2a14b55200e784d157207b4d';
-const BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = '2dca580c2a14b55200e784d157207b4d'; // can be stored in env for prod
+const BASE_URL = 'https://api.themoviedb.org/3'; // can be stored in env for prod
 
 export const fetchMovies = async (
   dispatch: Dispatch,
@@ -38,7 +38,9 @@ export const fetchMovies = async (
   try {
     dispatch(moviesListInit(direction));
     const response = await axios.get(endPoint);
-    const movies = response?.data?.results;
+    const movies = response?.data?.results?.sort(
+      (a: MovieItemType, b: MovieItemType) => b.popularity - a.popularity,
+    );
     dispatch(moviesListSuccess(movies, year, direction));
   } catch (err) {
     const msg = getApiErrorMessage(err);

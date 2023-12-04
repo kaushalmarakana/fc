@@ -31,7 +31,6 @@ const genresReducer = (state = initialState, action: AnyAction) => {
       };
     case GENRES_LIST_FETCH_SUCCESS:
       const {genres} = action.payload;
-
       return {
         ...state,
         genres: genres,

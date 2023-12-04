@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {FlatList, ListRenderItem, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchSearchedMovies} from '../../apis/movies';
-import {Nullable} from '../../types';
-import {selectSearchedMovies} from '../../redux/selectors';
-import MovieCard from '../movies/MovieCard';
 import CircularLoader from '../../components/CircularLoader';
+import {selectSearchedMovies} from '../../redux/selectors';
+import {MovieItemType, Nullable} from '../../types';
+import MovieCard from '../movies/MovieCard';
 
 type Props = {
   searchText: Nullable<string>;
@@ -49,6 +49,11 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
     return null;
   };
 
+  const renderItem: ListRenderItem<MovieItemType> = useCallback(
+    ({item}) => <MovieCard item={item} />,
+    [],
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -59,7 +64,7 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
         ListEmptyComponent={renderBackfill}
         onEndReached={loadMore}
         onEndReachedThreshold={1}
-        renderItem={({item}) => <MovieCard item={item} />}
+        renderItem={renderItem}
       />
       {renderFooter()}
     </View>

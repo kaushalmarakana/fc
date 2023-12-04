@@ -9,6 +9,8 @@ export type MovieItemType = {
   release_date: string;
   title: string;
   vote_average: number;
+  popularity: number;
+  genre_ids: Array<number>;
 };
 
 export type SectionType = {

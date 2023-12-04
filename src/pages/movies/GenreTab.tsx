@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 import {genresSelectionUpdate} from '../../redux/actions/genresActions';
 import {moviesListReset} from '../../redux/actions/moviesActions';
 import {GenreType, Nullable} from '../../types';
+import COLORS from '../../theme/colors';
 
 type Props = {
   item: GenreType;
@@ -33,14 +34,14 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#333',
+    backgroundColor: COLORS.tabBgColor,
     marginHorizontal: 10,
   },
   activeTab: {
-    backgroundColor: 'red',
+    backgroundColor: COLORS.activeTabColor,
   },
   title: {
-    color: 'white',
+    color: COLORS.tabTitleColor,
     includeFontPadding: false,
   },
 });
