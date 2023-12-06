@@ -1,14 +1,20 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, ListRenderItem, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchSearchedMovies} from '../../apis/movies';
-import CircularLoader from '../../components/CircularLoader';
+import RetryToast from '../../components/RetryToast';
 import {moviesSearchListReset} from '../../redux/actions/searchActions';
 import {selectSearchedMovies} from '../../redux/selectors';
 import COLORS from '../../theme/colors';
 import {MovieItemType, Nullable} from '../../types';
 import MovieCard from '../movies/MovieCard';
-import RetryToast from '../../components/RetryToast';
 
 type Props = {
   searchText: Nullable<string>;
@@ -52,14 +58,14 @@ const SearchPage: React.FC<Props> = ({searchText}) => {
 
   const renderTopLoader = () => {
     if (isLoading && page === 1) {
-      return <CircularLoader />;
+      return <ActivityIndicator size="large" color={COLORS.loaderColor} />;
     }
     return null;
   };
 
   const renderBottomLoader = () => {
     if (isLoading && page > 1) {
-      return <CircularLoader />;
+      return <ActivityIndicator size="large" color={COLORS.loaderColor} />;
     }
     return null;
   };

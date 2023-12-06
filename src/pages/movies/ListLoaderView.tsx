@@ -1,6 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import CircularLoader from '../../components/CircularLoader';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import COLORS from '../../theme/colors';
 import {Nullable} from '../../types';
 
@@ -11,7 +10,7 @@ type Props = {
 const ListLoaderView: React.FC<Props> = ({showLoader}) => {
   return (
     <View style={[styles.container, showLoader ? styles.show : styles.hide]}>
-      <CircularLoader />
+      <ActivityIndicator size="large" color={COLORS.loaderColor} />
     </View>
   );
 };

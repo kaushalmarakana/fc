@@ -18,7 +18,7 @@ const App = () => {
       <TextInput
         placeholder="search"
         style={styles.input}
-        onChangeText={_.debounce(onChangeText, 500)}
+        onChangeText={_.debounce(onChangeText, 300)}
       />
       {searchText ? <SearchPage searchText={searchText} /> : <MoviesPage />}
     </SafeAreaView>
