@@ -38,6 +38,7 @@ npm run ios
 
 - If genre is changed at particular year section, user will be landed on that year only with new data
 - Genres filter is not local filter, on change of genre all 20 new items will be fetched with genre filter applied to api
+- If any side up or down api fails for any year, it will stop there and give user option to retry from same year
 
 ## Extra information
 
@@ -51,3 +52,8 @@ npm run ios
 - Xcode - 14.1
 - Android Studio: 2023.1 AI-231.9392.1.2311.11076708
 - Java: 18.0.2
+
+## Build
+
+- Created build for test the functionality in case of the live project won't work due to system config issue
+- Created functionality demo recordings for reference
